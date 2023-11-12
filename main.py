@@ -6,10 +6,10 @@ import pandas as pd
 
 from article_parser import get_article
 
-FIRST_ARTICLE_ID = 1000
+FIRST_ARTICLE_ID = 773234
 ARTICLES_TO_COLLECT = 10000
 
-BUCKET = ""
+BUCKET = "kekw"
 PATH = "datasets/articles.pkl"
 COLUMNS = ['id', 'title', 'text', 'time', 'hubs', 'tags']
 
@@ -18,7 +18,8 @@ _LOG = logging.getLogger()
 _LOG.setLevel(logging.INFO)
 _LOG.addHandler(logging.StreamHandler())
 
-session = boto3.session.Session(profile_name='habr')
+#session = boto3.session.Session(profile_name='habr')
+session = boto3.session.Session()
 s3 = session.client(
     service_name='s3',
     endpoint_url='https://storage.yandexcloud.net'
@@ -30,7 +31,7 @@ def save_results(df):
         f.write(pickle.dumps(df))
     
     data = pickle.dumps(df)
-    s3.put_object(Bucket=BUCKET, Key=PATH, Body=data)
+    #s3.put_object(Bucket=BUCKET, Key=PATH, Body=data)
 
 
 def main():
@@ -41,8 +42,8 @@ def main():
     errors = 0
     successes = 0
 
-    for i, article_id in enumerate(range(FIRST_ARTICLE_ID, FIRST_ARTICLE_ID + ARTICLES_TO_COLLECT)):
-        if i != 0 and i % 100 == 0:
+    for i, article_id in enumerate(range(FIRST_ARTICLE_ID, FIRST_ARTICLE_ID - ARTICLES_TO_COLLECT, -1)):
+        if i != 0 and i % 10 == 0:
             _LOG.info("Current stats: {} errors, {} successes".format(errors, successes))
             _LOG.info("Creating backup of results")
             save_results(data)
