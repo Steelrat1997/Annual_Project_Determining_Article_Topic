@@ -3,12 +3,11 @@ from bs4 import BeautifulSoup
 
 ARTICLE_URL_TEMPLATE = 'https://habr.com/ru/articles/{}/'
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 
 def get_article(article_id):
     # выгрузка документа
-    r = requests.get(ARTICLE_URL_TEMPLATE.format(article_id), headers=HEADERS)
+    r = requests.get(ARTICLE_URL_TEMPLATE.format(article_id))
 
     if r.status_code != 200:
         print('Status code is not ok:', r.status_code)

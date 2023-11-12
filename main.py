@@ -1,6 +1,5 @@
 import logging
 import pickle
-import boto3
 
 import pandas as pd
 
@@ -18,12 +17,6 @@ _LOG = logging.getLogger()
 _LOG.setLevel(logging.INFO)
 _LOG.addHandler(logging.StreamHandler())
 
-#session = boto3.session.Session(profile_name='habr')
-session = boto3.session.Session()
-s3 = session.client(
-    service_name='s3',
-    endpoint_url='https://storage.yandexcloud.net'
-)
 
 
 def save_results(df):
@@ -31,7 +24,6 @@ def save_results(df):
         f.write(pickle.dumps(df))
     
     data = pickle.dumps(df)
-    #s3.put_object(Bucket=BUCKET, Key=PATH, Body=data)
 
 
 def main():
