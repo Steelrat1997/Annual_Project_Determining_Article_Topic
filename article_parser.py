@@ -22,7 +22,7 @@ def get_article(article_id):
         return None
     else:
         doc['title'] = soup.find("h1", {"class": "tm-title"}).text
-        doc['text'] = soup.find("div", {"id": "post-content-body"}).text
+        doc['text'] = soup.find("div", {"id": "post-content-body"}).get_text(separator=' ')
         doc['time'] = soup.find("span", {"class": "tm-article-datetime-published"}).text
         doc['hubs'] = "|".join(list(map(lambda s: s.text, soup.find_all('span', {'class': 'tm-publication-hub__link-container'}))))
         doc['tags'] = "|".join(list(map(lambda s: s.text, soup.find_all('a', {'class': 'tm-tags-list__link'}))))

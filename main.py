@@ -8,6 +8,12 @@ from article_parser import get_article
 FIRST_ARTICLE_ID = 773234
 ARTICLES_TO_COLLECT = 10000
 
+try:
+    with open('datasets/article_number.txt', 'r') as file:
+        CURRENT_ARTICLE_ID = int(file.read().strip())
+except:
+    CURRENT_ARTICLE_ID = FIRST_ARTICLE_ID
+
 BUCKET = "kekw"
 PATH = "datasets/articles.pkl"
 COLUMNS = ['id', 'title', 'text', 'time', 'hubs', 'tags']
@@ -39,6 +45,8 @@ def main():
             _LOG.info("Current stats: {} errors, {} successes".format(errors, successes))
             _LOG.info("Creating backup of results")
             save_results(data)
+            with open('datasets/article_number.txt', 'w') as file:
+                file.write(str(article_id))
             _LOG.info("Results saved")
 
         cur_article = get_article(article_id)
