@@ -8,15 +8,16 @@ from article_parser import get_article
 FIRST_ARTICLE_ID = 773234
 ARTICLES_TO_COLLECT = 10000
 
+
+PATH_ARTICLE_NUMBER = 'datasets/current_article_number.txt'
+PATH_DATASETS = "datasets/articles.pkl"
+COLUMNS = ['id', 'title', 'text', 'time', 'hubs', 'tags']
+
 try:
-    with open('datasets/article_number.txt', 'r') as file:
+    with open(PATH_ARTICLE_NUMBER, 'r') as file:
         CURRENT_ARTICLE_ID = int(file.read().strip())
 except:
     CURRENT_ARTICLE_ID = FIRST_ARTICLE_ID
-
-BUCKET = "kekw"
-PATH = "datasets/articles.pkl"
-COLUMNS = ['id', 'title', 'text', 'time', 'hubs', 'tags']
 
 
 _LOG = logging.getLogger()
@@ -26,7 +27,7 @@ _LOG.addHandler(logging.StreamHandler())
 
 
 def save_results(df):
-    with open(PATH, 'wb') as f:
+    with open(PATH_DATASETS, 'wb') as f:
         f.write(pickle.dumps(df))
     
     data = pickle.dumps(df)
@@ -40,12 +41,12 @@ def main():
     errors = 0
     successes = 0
 
-    for i, article_id in enumerate(range(FIRST_ARTICLE_ID, FIRST_ARTICLE_ID - ARTICLES_TO_COLLECT, -1)):
+    for i, article_id in enumerate(range(CURRENT_ARTICLE_ID, FIRST_ARTICLE_ID - ARTICLES_TO_COLLECT, -1)):
         if i != 0 and i % 10 == 0:
             _LOG.info("Current stats: {} errors, {} successes".format(errors, successes))
             _LOG.info("Creating backup of results")
             save_results(data)
-            with open('datasets/article_number.txt', 'w') as file:
+            with open(PATH_ARTICLE_NUMBER, 'w') as file:
                 file.write(str(article_id))
             _LOG.info("Results saved")
 
