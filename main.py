@@ -42,7 +42,7 @@ def main():
     successes = 0
 
     for i, article_id in enumerate(range(CURRENT_ARTICLE_ID, FIRST_ARTICLE_ID - ARTICLES_TO_COLLECT, -1)):
-        if i != 0 and i % 10 == 0:
+        if i != 0 and i % 100 == 0:
             _LOG.info("Current stats: {} errors, {} successes".format(errors, successes))
             _LOG.info("Creating backup of results")
             save_results(data)
